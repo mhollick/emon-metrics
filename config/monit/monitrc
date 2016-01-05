@@ -1,0 +1,50 @@
+set daemon 10
+set logfile syslog
+set pidfile /var/run/monit.pid
+set idfile /etc/monit.d/monit.id
+set statefile /var/run/monit.state
+set mailserver localhost
+set eventqueue
+    basedir /var/monit
+    slots 100
+set alert root@localhost
+# set alert your-name@your.domain not on { instance, action }
+set httpd port 8889 and allow admin:monit
+
+
+check process postfix with pidfile /var/spool/postfix/pid/master.pid
+  start program = "/usr/sbin/postfix start"
+  stop  program = "/usr/sbin/postfix stop"
+  if failed host 127.0.0.1 port 25 protocol smtp then restart
+
+
+check process rsyslogd
+  with pidfile "/var/run/rsyslogd.pid"
+  start program = "/usr/sbin/rsyslogd"
+  stop program = "/usr/bin/pkill -n rsyslogd"
+  if 3 restarts within 3 cycles then timeout
+
+
+check process gunicorn with pidfile "/var/run/gunicorn.pid"
+  start program = "/graphite-api/bin/gunicorn -w2 --daemon --user graphite --group graphite --log-syslog --pid /var/run/gunicorn.pid graphite_api.app:app -b 0.0.0.0:8888" with timeout 10 seconds
+  stop program = "/bin/kill -TERM $(cat /var/run/gunicorn.pid)"
+  #if failed host 127.0.0.1 port 8888 protocol http then restart
+  if 5 restarts within 5 cycles then alert
+  depends on rsyslogd
+
+
+check process relay
+  matching "relay"
+  start program = "/bin/su - relay -c -- '/usr/local/bin/relay -f /etc/relay.conf -p 2003 -l /var/log/relay/relay.log &'"
+  stop program = "/usr/bin/pkill relay"
+  if failed port 2003 then restart
+  if 5 restarts within 5 cycles then alert
+  depends on rsyslogd
+
+
+check process go-carbon with pidfile "/var/run/go-carbon/go-carbon.pid"
+  start program = "/usr/local/bin/go-carbon -config /etc/go-carbon.conf -pidfile /var/run/go-carbon/go-carbon.pid -daemon"
+  stop program = "/bin/kill -TERM $(cat /var/run/go-carbon/go-carbon.pid)"
+  if failed host 127.0.0.1 port 2013 then restart
+  if 5 restarts within 5 cycles then alert
+  depends on rsyslogd

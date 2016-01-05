@@ -1,0 +1,5 @@
+#!/bin/bash
+set -x
+
+/bin/su - relay -c -- '/usr/local/bin/relay -f /etc/relay.conf -p 2003 -l /var/log/relay/relay.log'
+exit 0

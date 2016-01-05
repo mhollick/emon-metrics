@@ -1,0 +1,15 @@
+search_index: /data/index/index.db
+finders:
+  - graphite_api.finders.whisper.WhisperFinder
+functions:
+  - graphite_api.functions.SeriesFunctions
+whisper:
+  directories:
+    - /data/whisper
+carbon:
+  hosts:
+    - 127.0.0.1:7002
+  timeout: 5
+  retry_delay: 15
+  carbon_prefix: carbon
+  replication_factor: 1
