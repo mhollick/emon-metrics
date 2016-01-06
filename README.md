@@ -10,4 +10,3 @@ A blend of
 held together by monit
 
 Intended for used as part of a high resolution monitoring solution on AWS
-# emon-bosun
