@@ -7,6 +7,10 @@ A blend of
 - graphite-api
 - postfix
 
-held together by monit
+Held together by monit
 
 Intended for used as part of a high resolution monitoring solution on AWS
+
+
+## Purpose
+
