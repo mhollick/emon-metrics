@@ -43,7 +43,7 @@ RUN apk add --update curl wget bash vim
 RUN mkdir -p /build \
              /build/go && \
     mkdir -p /data/monit \
-             /data/carbon && \
+             /data/whisper && \
     mkdir -p /usr/local/bin
 
 # Install a load of required runtime and development packages
@@ -74,7 +74,7 @@ RUN addgroup -S carbon && \
     addgroup -S relay && \
     addgroup -S graphite && \
     addgroup -S postfix
-RUN adduser  -S -G carbon -D -H -h /data/carbon carbon && \
+RUN adduser  -S -G carbon -D -H -h /data/whisper carbon && \
     adduser  -S -G relay -D -H -h /var/tmp -s /bin/sh relay && \
     adduser  -S -G graphite -D -H -h /data/carbon graphite && \
     adduser  -S -G postfix -D -H -h /var/spool/postfix postfix && \

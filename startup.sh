@@ -60,6 +60,8 @@ config_go_carbon () {
     sed -i "s/__CENTRAL_RETENTION__/${central_retention}/g" /etc/storage-schemas.conf
     sed -i "s/__LOCAL_RETENTION__/${local_retention}/g" /etc/storage-schemas.conf
     sed -i "s/__HOSTING__/${hosting}/g" /etc/storage-schemas.conf /etc/storage-aggregation.conf
+    mkdir /data/whisper
+    chown carbon:carbon /data/whisper
 }
 
 config_graphite_api () {
@@ -68,8 +70,7 @@ config_graphite_api () {
 }
 
 config_monit () {
-    # Placeholder - no customisation here yet
-    return 0
+    mkdir /data/monit
 }
 
 config_nginx () {
