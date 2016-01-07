@@ -53,5 +53,5 @@ $ sudo mkdir -p /srv/docker/{emon-local,emon-central,grafana}/{data,config}
 $ docker run --name "emon-local" -p 2003:2003 -p 8888:8888 -v /data /srv/docker/emon-local mayan/emon-metrics
 $ docker run --name "emon-central" -p 2003:3003 -p 8888:9888 -v /data /srv/docker/emon-local mayan/emon-central
 $ docker run --name "grafana" -p 3000:80 grafana/grafana
-
+```
 
